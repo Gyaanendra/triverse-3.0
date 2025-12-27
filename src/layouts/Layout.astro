@@ -139,9 +139,7 @@ const { title = 'Triverse 2.0' } = Astro.props;
 
             event.preventDefault();
             hidePageWithFade(() => {
-              playIntroOverlay(() => {
-                window.location.href = href;
-              });
+              window.location.href = href;
             });
           });
         });
