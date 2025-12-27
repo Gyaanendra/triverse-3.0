@@ -1,0 +1,119 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Triverse 2.0 · Events">
+  <section class="space-y-10">
+    <header class="space-y-3">
+      <h1 class="text-4xl font-bold">Event Timeline</h1>
+      <p class="opacity-80 max-w-2xl">
+        Follow the journey of Triverse 2.0 from kickoff to closing ceremony.
+        Replace these entries later with real sessions and keynote details.
+      </p>
+    </header>
+
+    <!-- Timeline using daisyUI timeline styles -->
+    <ul class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical bg-base-100/60 rounded-box p-6">
+      <li>
+        <div class="timeline-middle text-sky-400">
+          <span class="material-symbols-outlined"> rocket_launch </span>
+        </div>
+        <div class="timeline-start md:text-end mb-10">
+          <time class="font-mono text-sm opacity-70">Day 1 · 09:00 AM</time>
+          <div class="text-lg font-semibold">Inauguration &amp; Opening Keynote</div>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+            porta, magna non feugiat vulputate, enim magna varius elit, eget
+            feugiat nunc purus id lectus.
+          </p>
+        </div>
+        <div class="timeline-middle">
+          <div class="badge badge-primary"></div>
+        </div>
+      </li>
+
+      <li>
+        <hr />
+        <div class="timeline-middle">
+          <div class="badge badge-secondary"></div>
+        </div>
+        <div class="timeline-end mb-10">
+          <time class="font-mono text-sm opacity-70">Day 1 · 11:30 AM</time>
+          <div class="text-lg font-semibold">Hands-on Workshop: Build &amp; Deploy</div>
+          <p>
+            Vivamus quis sapien non tortor facilisis tincidunt. Cras a ex
+            arcu. Proin at dui faucibus, volutpat lectus non, tristique orci.
+          </p>
+        </div>
+        <div class="timeline-middle"></div>
+      </li>
+
+      <li>
+        <hr />
+        <div class="timeline-middle">
+          <div class="badge badge-accent"></div>
+        </div>
+        <div class="timeline-start md:text-end mb-10">
+          <time class="font-mono text-sm opacity-70">Day 1 · 03:00 PM</time>
+          <div class="text-lg font-semibold">Panel Discussion: Future of Tech</div>
+          <p>
+            Aliquam erat volutpat. Morbi pretium, lorem at dapibus efficitur,
+            erat erat vehicula metus, vel auctor turpis lacus non nisi.
+          </p>
+        </div>
+        <div class="timeline-middle"></div>
+      </li>
+
+      <li>
+        <hr />
+        <div class="timeline-middle">
+          <div class="badge badge-info"></div>
+        </div>
+        <div class="timeline-end mb-10">
+          <time class="font-mono text-sm opacity-70">Day 2 · 10:00 AM</time>
+          <div class="text-lg font-semibold">Hackathon &amp; Ideathon</div>
+          <p>
+            Suspendisse potenti. Phasellus ullamcorper, orci nec feugiat
+            maximus, turpis ipsum gravida nulla, at iaculis ipsum arcu eget
+            arcu.
+          </p>
+        </div>
+        <div class="timeline-middle"></div>
+      </li>
+
+      <li>
+        <hr />
+        <div class="timeline-middle">
+          <div class="badge badge-success"></div>
+        </div>
+        <div class="timeline-start md:text-end mb-10">
+          <time class="font-mono text-sm opacity-70">Day 2 · 04:30 PM</time>
+          <div class="text-lg font-semibold">Valedictory &amp; Prize Distribution</div>
+          <p>
+            Curabitur in lacinia erat. Fusce faucibus pulvinar risus, in
+            ultricies augue dictum vel. Integer luctus condimentum tempus.
+          </p>
+        </div>
+        <div class="timeline-middle"></div>
+      </li>
+    </ul>
+
+    <!-- Extra scrolling content -->
+    <div class="prose prose-invert max-w-none">
+      <h2>More details coming soon</h2>
+      <p>
+        Nunc laoreet sem nec justo feugiat, sit amet eleifend urna lacinia.
+        Duis vitae est sit amet tortor congue consectetur nec vel lorem.
+      </p>
+      <p>
+        Pellentesque vulputate, massa nec rhoncus tristique, ex nisl auctor
+        augue, vitae efficitur nisl mi non mi. Mauris elementum sit amet mi at
+        posuere.
+      </p>
+      <p>
+        Mauris vulputate convallis massa vitae ultrices. Aenean non suscipit
+        purus. Morbi non dolor ac erat convallis consectetur.
+      </p>
+    </div>
+  </section>
+</Layout>

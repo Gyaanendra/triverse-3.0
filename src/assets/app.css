@@ -1,0 +1,134 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* Custom animations and page overlay */
+@layer utilities {
+  .page-fade-in {
+    animation: page-fade-in 400ms ease-out forwards;
+  }
+
+  .page-fade-out {
+    animation: page-fade-out 300ms ease-in forwards;
+  }
+
+  .page-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at top, rgba(129, 140, 248, 0.18), transparent 55%),
+      radial-gradient(circle at bottom, rgba(56, 189, 248, 0.16), transparent 55%);
+    mix-blend-mode: screen;
+    opacity: 0;
+    animation: overlay-fade 1.2s ease-out forwards;
+    z-index: 0;
+  }
+}
+
+@keyframes overlay-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes page-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Intro overlay with diagonal bars */
+.intro-overlay-hidden {
+  display: none;
+}
+
+/* Used to reset animations when replaying */
+.intro-reset {
+  animation: none !important;
+}
+
+.intro-bar-left {
+  animation: intro-bar-left 1600ms ease-out forwards;
+}
+
+.intro-bar-right {
+  animation: intro-bar-right 1600ms ease-out forwards;
+}
+
+.intro-center {
+  animation: intro-center 1500ms ease-out forwards;
+}
+
+@keyframes intro-bar-left {
+  0% {
+    transform: translate(-110%, 40%) rotate(-35deg);
+  }
+  50% {
+    transform: translate(-5%, 0%) rotate(-25deg);
+  }
+  100% {
+    transform: translate(-110%, -40%) rotate(-35deg);
+    opacity: 0;
+  }
+}
+
+@keyframes intro-bar-right {
+  0% {
+    transform: translate(110%, -40%) rotate(-35deg);
+  }
+  50% {
+    transform: translate(5%, 0%) rotate(-25deg);
+  }
+  100% {
+    transform: translate(110%, 40%) rotate(-35deg);
+    opacity: 0;
+  }
+}
+
+@keyframes intro-center {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  35% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0) scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+}
+
+/* Simple timeline styling if you want extra line accent */
+.timeline-line {
+  position: relative;
+}
+
+.timeline-line::before {
+  content: "";
+  position: absolute;
+  left: 0.875rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #38bdf8, #a855f7);
+}

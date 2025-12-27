@@ -1,11 +1,112 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Triverse 2.0 · Home">
+  <!-- On-load hero animation with event name + logo -->
+  <section class="hero min-h-[70vh] bg-white text-[#00629B]">
+    <div class="hero-content flex flex-col lg:flex-row items-center gap-10">
+      <div class="space-y-6 max-w-xl">
+        <p class="badge badge-lg border-0 bg-[#00B5E2] text-white">
+          IEEE Student Branch · Bennett University
+        </p>
+        <h1 class="text-5xl lg:text-6xl font-extrabold leading-tight">
+          Triverse 2.0
+        </h1>
+        <p class="text-base lg:text-lg opacity-90">
+          A convergence of innovation, creativity, and collaboration. Replace
+          this paragraph later with the real story of your flagship event.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href="/events" class="btn border-0 bg-[#00629B] text-white hover:bg-[#009CA6]">Explore Events</a>
+          <a href="/teams" class="btn border border-[#00B5E2] text-[#00629B] bg-white hover:bg-[#00B5E2]/10">Meet the Teams</a>
+        </div>
+      </div>
+      <div class="card bg-base-100/80 shadow-2xl w-full max-w-sm animate-bounce-slow">
+        <div class="card-body items-center">
+          <img
+            src="/src/images/ieeelogo.png"
+            alt="IEEE Club Logo"
+            class="h-24 w-auto mb-4"
+            loading="lazy"
+          />
+          <h2 class="card-title mb-2">Powered by IEEE SB</h2>
+          <p class="text-sm opacity-80 text-center">
+            Celebrate technology and community with a series of hands-on
+            sessions, hackathons, and inspiring talks.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Long scrolling content with placeholder paragraphs -->
+  <section class="mt-16 space-y-10 bg-white/90 rounded-2xl p-6 shadow-sm">
+    <div class="prose max-w-none text-[#00629B]">
+      <h2>Why Triverse 2.0?</h2>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+        facilisis, est et elementum aliquam, sapien mi pretium lectus, vitae
+        pretium magna augue nec libero. Curabitur sollicitudin, sem sit amet
+        luctus hendrerit, felis nisi venenatis arcu, id convallis arcu erat ut
+        eros.
+      </p>
+      <p>
+        Vivamus non massa nec sapien tristique cursus. Nam mattis, urna eget
+        auctor mollis, ipsum ligula fermentum arcu, sed porttitor libero sapien
+        vitae ante. Praesent vehicula ligula vel nibh vehicula, vitae congue
+        neque commodo.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <article class="card bg-base-100/80 shadow-lg">
+        <div class="card-body">
+          <h3 class="card-title">Innovate</h3>
+          <p>
+            Suspendisse volutpat condimentum sem, sit amet facilisis ipsum
+            vulputate quis. In hac habitasse platea dictumst.
+          </p>
+        </div>
+      </article>
+      <article class="card bg-base-100/80 shadow-lg">
+        <div class="card-body">
+          <h3 class="card-title">Collaborate</h3>
+          <p>
+            Integer semper metus eget orci dignissim, vel fringilla elit
+            ultricies. Duis iaculis lorem at pulvinar aliquet.
+          </p>
+        </div>
+      </article>
+      <article class="card bg-base-100/80 shadow-lg">
+        <div class="card-body">
+          <h3 class="card-title">Celebrate</h3>
+          <p>
+            Ut ullamcorper, urna vel gravida bibendum, urna est gravida augue,
+            nec congue eros mi ac nisl.
+          </p>
+        </div>
+      </article>
+    </div>
+
+    <div class="prose prose-invert max-w-none">
+      <h2>What to expect</h2>
+      <p>
+        Aliquam erat volutpat. Etiam ac efficitur purus. Quisque pharetra
+        blandit dolor, sed commodo urna scelerisque vitae. Pellentesque id odio
+        quis arcu sodales consequat.
+      </p>
+      <p>
+        Nunc dictum, arcu vel gravida facilisis, ipsum lacus posuere velit, sed
+        accumsan lectus ex nec quam. Cras congue, arcu sit amet hendrerit
+        pulvinar, augue dui vulputate arcu, sit amet molestie turpis neque non
+        ligula.
+      </p>
+      <p>
+        Donec maximus nunc ut dui consequat, nec laoreet libero pulvinar. Sed
+        convallis in urna at ultricies. Vestibulum ante ipsum primis in
+        faucibus orci luctus et ultrices posuere cubilia curae.
+      </p>
+    </div>
+  </section>
 </Layout>

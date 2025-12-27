@@ -1,22 +1,165 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import "../assets/app.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+const { title = 'Triverse 2.0' } = Astro.props;
+---
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen bg-base-100 text-base-content">
+    <div class="page-overlay"></div>
+
+    <!-- Intro animation overlay (bars + logo/title) -->
+    <div
+      id="intro-overlay"
+      class="intro-overlay fixed inset-0 flex items-center justify-center overflow-hidden z-50 pointer-events-none bg-black"
+    >
+      <div
+        class="intro-bar intro-bar-left absolute w-[140%] h-[45%] opacity-90 bg-gradient-to-r from-sky-500 to-indigo-500"
+      ></div>
+      <div
+        class="intro-bar intro-bar-right absolute w-[140%] h-[45%] opacity-90 bg-gradient-to-r from-sky-500 to-indigo-500"
+      ></div>
+      <div class="intro-center relative text-center text-white z-10">
+        <img
+          src="/src/images/ieeelogo.png"
+          alt="IEEE Club Logo"
+          class="h-20 w-auto mb-4 mx-auto"
+          loading="lazy"
+        />
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-wide">Triverse 2.0</h1>
+        <p class="mt-2 text-sm md:text-base opacity-80">
+          IEEE Student Branch · Bennett University
+        </p>
+      </div>
+    </div>
+
+    <Header />
+
+    <!-- floating dock navigation only -->
+    <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+      <div class="btn-group bg-base-200/90 backdrop-blur rounded-box shadow-lg p-1">
+        <a href="/" class="btn btn-sm btn-ghost" data-page-link>Home</a>
+        <a href="/events" class="btn btn-sm btn-ghost" data-page-link>Events</a>
+        <a href="/teams" class="btn btn-sm btn-ghost" data-page-link>Teams</a>
+        <a href="/sponsers" class="btn btn-sm btn-ghost" data-page-link>Sponsers</a>
+      </div>
+    </nav>
+
+    <main id="page-root" class="pt-24 pb-24 px-4 max-w-5xl mx-auto opacity-0">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <script is:inline>
+      // Play the diagonal bars + logo intro animation.
+      // If a callback is provided, it runs after the animation finishes.
+      const playIntroOverlay = (callback) => {
+        const overlay = document.getElementById('intro-overlay');
+        if (!overlay) {
+          if (callback) callback();
+          return;
+        }
+
+        const center = overlay.querySelector('.intro-center');
+        const animatedElements = overlay.querySelectorAll('.intro-bar, .intro-center');
+
+        // Unhide overlay
+        overlay.classList.remove('intro-overlay-hidden');
+
+        // Reset animations so they can replay
+        animatedElements.forEach((el) => {
+          el.classList.add('intro-reset');
+          // force reflow
+          void el.offsetWidth;
+          el.classList.remove('intro-reset');
+        });
+
+        const finish = () => {
+          overlay.classList.add('intro-overlay-hidden');
+          if (callback) callback();
+        };
+
+        if (center) {
+          center.addEventListener('animationend', finish, { once: true });
+          // Fallback
+          setTimeout(finish, 2000);
+        } else {
+          setTimeout(finish, 2000);
+        }
+      };
+
+      const showPage = () => {
+        const main = document.getElementById('page-root');
+        if (!main) return;
+        main.classList.remove('opacity-0');
+        main.classList.remove('page-fade-out');
+        main.classList.add('page-fade-in');
+      };
+
+      const hidePageWithFade = (onHidden) => {
+        const main = document.getElementById('page-root');
+        if (!main) {
+          if (onHidden) onHidden();
+          return;
+        }
+        main.classList.remove('page-fade-in');
+        main.classList.add('page-fade-out');
+
+        const done = () => {
+          main.removeEventListener('animationend', done);
+          if (onHidden) onHidden();
+        };
+
+        main.addEventListener('animationend', done, { once: true });
+        // Fallback
+        setTimeout(done, 400);
+      };
+
+      const enablePageTransitions = () => {
+        const links = document.querySelectorAll('a[data-page-link]');
+        links.forEach((link) => {
+          link.addEventListener('click', (event) => {
+            const href = link.getAttribute('href');
+            if (!href) return;
+
+            const url = new URL(href, window.location.origin);
+            if (url.origin !== window.location.origin || url.pathname === window.location.pathname) {
+              return;
+            }
+
+            event.preventDefault();
+            hidePageWithFade(() => {
+              playIntroOverlay(() => {
+                window.location.href = href;
+              });
+            });
+          });
+        });
+      };
+
+      const init = () => {
+        // Always show bars first on load, then fade the page in
+        playIntroOverlay(() => {
+          showPage();
+          enablePageTransitions();
+        });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    </script>
+  </body>
+</html>
