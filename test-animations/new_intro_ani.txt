@@ -1,0 +1,662 @@
+/* Custom animations and page overlay */
+@layer utilities {
+  .page-fade-in {
+    animation: page-fade-in 800ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .page-fade-out {
+    animation: page-fade-out 400ms ease-in forwards;
+  }
+
+  .page-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+        circle at top,
+        rgba(129, 140, 248, 0.18),
+        transparent 55%
+      ),
+      radial-gradient(
+        circle at bottom,
+        rgba(56, 189, 248, 0.16),
+        transparent 55%
+      );
+    mix-blend-mode: screen;
+    opacity: 0;
+    animation: overlay-fade 1.2s ease-out forwards;
+    z-index: 0;
+  }
+}
+
+@keyframes overlay-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes page-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Enhanced intro overlay with circular ripple effect */
+.intro-overlay {
+  background: radial-gradient(circle at center, #0a0a1a 0%, #000000 100%);
+  /* Mobile optimization: Use GPU acceleration */
+  will-change: opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.intro-overlay-hidden {
+  display: none;
+}
+
+/* Used to reset animations when replaying */
+.intro-reset {
+  animation: none !important;
+}
+
+/* Circular ripple rings - Mobile optimized */
+.intro-bar-left,
+.intro-bar-right {
+  border-radius: 50%;
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 3px solid;
+  border-color: rgba(56, 189, 248, 0.8);
+  box-shadow: 0 0 60px rgba(56, 189, 248, 0.6),
+    0 0 100px rgba(129, 140, 248, 0.4), inset 0 0 60px rgba(56, 189, 248, 0.3);
+  background: transparent;
+  /* Mobile optimization */
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Shorter animation duration for mobile */
+@media (max-width: 768px) {
+  .intro-bar-left {
+    animation: ripple-expand-1 1600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    width: 200px;
+    height: 200px;
+  }
+  
+  .intro-bar-right {
+    animation: ripple-expand-2 1600ms cubic-bezier(0.16, 1, 0.3, 1) 150ms forwards;
+    width: 200px;
+    height: 200px;
+  }
+  
+  .intro-center {
+    animation: intro-center-mobile 1800ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .intro-center img {
+    animation: logo-pulse-mobile 1800ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .intro-center h1 {
+    animation: text-reveal-mobile 1800ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .intro-center p {
+    animation: text-reveal-mobile 1800ms cubic-bezier(0.16, 1, 0.3, 1) 100ms forwards;
+  }
+}
+
+/* Desktop animations */
+@media (min-width: 769px) {
+  .intro-bar-left {
+    animation: ripple-expand-1 2400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .intro-bar-right {
+    animation: ripple-expand-2 2400ms cubic-bezier(0.16, 1, 0.3, 1) 200ms forwards;
+  }
+  
+  .intro-center {
+    animation: intro-center 2600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .intro-center img {
+    animation: logo-pulse 2600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .intro-center h1 {
+    animation: text-reveal 2600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .intro-center p {
+    animation: text-reveal 2600ms cubic-bezier(0.16, 1, 0.3, 1) 150ms forwards;
+  }
+}
+
+.intro-center {
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5))
+    drop-shadow(0 0 40px rgba(56, 189, 248, 0.4));
+  /* Mobile optimization */
+  will-change: transform, opacity, filter;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Simplified particle burst for mobile */
+@media (max-width: 768px) {
+  .intro-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+        circle at 50% 50%,
+        rgba(56, 189, 248, 0.3) 0%,
+        transparent 4%
+      ),
+      radial-gradient(
+        circle at 45% 48%,
+        rgba(129, 140, 248, 0.2) 0%,
+        transparent 3%
+      ),
+      radial-gradient(
+        circle at 55% 52%,
+        rgba(56, 189, 248, 0.2) 0%,
+        transparent 3%
+      );
+    background-size: 100% 100%;
+    animation: particle-burst-mobile 1800ms ease-out forwards;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  
+  /* Disable geometric shapes on mobile for performance */
+  .intro-overlay::after {
+    display: none;
+  }
+}
+
+/* Full particle effect for desktop */
+@media (min-width: 769px) {
+  .intro-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+        circle at 50% 50%,
+        rgba(56, 189, 248, 0.4) 0%,
+        transparent 3%
+      ),
+      radial-gradient(
+        circle at 45% 48%,
+        rgba(129, 140, 248, 0.3) 0%,
+        transparent 2%
+      ),
+      radial-gradient(
+        circle at 55% 52%,
+        rgba(56, 189, 248, 0.3) 0%,
+        transparent 2%
+      ),
+      radial-gradient(
+        circle at 48% 45%,
+        rgba(129, 140, 248, 0.25) 0%,
+        transparent 2%
+      ),
+      radial-gradient(
+        circle at 52% 55%,
+        rgba(56, 189, 248, 0.25) 0%,
+        transparent 2%
+      ),
+      radial-gradient(
+        circle at 50% 48%,
+        rgba(129, 140, 248, 0.2) 0%,
+        transparent 1.5%
+      ),
+      radial-gradient(
+        circle at 50% 52%,
+        rgba(56, 189, 248, 0.2) 0%,
+        transparent 1.5%
+      );
+    background-size: 100% 100%;
+    animation: particle-burst 2600ms ease-out forwards;
+    opacity: 0;
+  }
+  
+  .intro-overlay::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    height: 400px;
+    transform: translate(-50%, -50%) rotate(0deg);
+    border: 2px solid rgba(56, 189, 248, 0.2);
+    border-radius: 20%;
+    animation: geometric-rotate 2400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+}
+
+/* Mobile-optimized animations */
+@keyframes particle-burst-mobile {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  40% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.5);
+  }
+}
+
+@keyframes intro-center-mobile {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+    filter: blur(10px);
+  }
+  35% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+    filter: blur(5px);
+  }
+}
+
+@keyframes logo-pulse-mobile {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  80% {
+    transform: scale(1);
+  }
+}
+
+@keyframes text-reveal-mobile {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+    letter-spacing: 0.3em;
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.1em;
+  }
+  80% {
+    letter-spacing: 0.05em;
+  }
+}
+
+/* Desktop animations */
+@keyframes particle-burst {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  60% {
+    opacity: 0.8;
+    transform: scale(2.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(4);
+  }
+}
+
+@keyframes geometric-rotate {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(0deg) scale(0.3);
+    border-radius: 50%;
+  }
+  30% {
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(180deg) scale(1);
+    border-radius: 20%;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(360deg) scale(1.5);
+    border-radius: 50%;
+  }
+}
+
+@keyframes ripple-expand-1 {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+}
+
+@keyframes ripple-expand-2 {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.8);
+    opacity: 0;
+  }
+}
+
+@keyframes intro-center {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.7);
+    filter: blur(15px) drop-shadow(0 0 0px transparent);
+  }
+  30% {
+    opacity: 0;
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px) drop-shadow(0 0 40px rgba(56, 189, 248, 0.8));
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0) scale(1.03);
+    filter: blur(0px) drop-shadow(0 0 50px rgba(56, 189, 248, 0.9));
+  }
+  88% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.01);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.96);
+    filter: blur(10px) drop-shadow(0 0 20px rgba(56, 189, 248, 0.3));
+  }
+}
+
+@keyframes logo-pulse {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0;
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  55% {
+    transform: scale(1.08) rotate(2deg);
+  }
+  65% {
+    transform: scale(1.02) rotate(-1deg);
+  }
+  70% {
+    transform: scale(1.01) rotate(0deg);
+  }
+}
+
+@keyframes text-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+    letter-spacing: 0.6em;
+    filter: blur(5px);
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.15em;
+    filter: blur(0px);
+  }
+  70% {
+    letter-spacing: 0.05em;
+  }
+}
+
+.intro-center h1 {
+  text-shadow: 0 0 20px rgba(56, 189, 248, 0.5),
+    0 0 40px rgba(56, 189, 248, 0.3);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+import "../assets/layout.css";
+import "../assets/app.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { Image } from "astro:assets";
+import ieeeLogo from "../images/ieeelogo.png";
+const { title = 'Triverse 3.0' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen bg-gradient-to-b from-[#00B5E2]/10 via-[#FFFFFF] to-[#009CA6]/10 text-base-content">
+    <div class="page-overlay"></div>
+
+    <!-- Intro animation overlay (circular ripple + logo/title) -->
+    <div
+      id="intro-overlay"
+      class="intro-overlay fixed inset-0 flex items-center justify-center overflow-hidden z-50 pointer-events-none bg-black"
+    >
+      <div class="intro-bar intro-bar-left"></div>
+      <div class="intro-bar intro-bar-right"></div>
+      <div class="intro-center relative text-center text-white z-10">
+        <Image
+          src={ieeeLogo}
+          alt="IEEE Club Logo"
+          class="h-32 md:h-40 w-auto mb-6 mx-auto"
+          loading="lazy"
+        />
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-wide">Triverse 3.0</h1>
+        <p class="mt-3 text-base md:text-lg opacity-80">
+          IEEE Student Branch · Bennett University
+        </p>
+      </div>
+    </div>
+
+    <Header />
+
+    <!-- floating dock navigation only -->
+    <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+      <div class="btn-group bg-base-200/90 backdrop-blur rounded-box shadow-lg p-1">
+        <a href="/" class="btn btn-sm btn-ghost" data-page-link>Home</a>
+        <a href="/events" class="btn btn-sm btn-ghost" data-page-link>Events</a>
+        <a href="/teams" class="btn btn-sm btn-ghost" data-page-link>Teams</a>
+        <a href="/sponsers" class="btn btn-sm btn-ghost" data-page-link>Sponsers</a>
+      </div>
+    </nav>
+
+    <main id="page-root" class="pt-24 pb-24 px-4 max-w-5xl mx-auto opacity-0">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <script is:inline>
+      // Play the diagonal bars + logo intro animation.
+      // If a callback is provided, it runs after the animation finishes.
+      const playIntroOverlay = (callback) => {
+        const overlay = document.getElementById('intro-overlay');
+        if (!overlay) {
+          if (callback) callback();
+          return;
+        }
+
+        const center = overlay.querySelector('.intro-center');
+        const animatedElements = overlay.querySelectorAll('.intro-bar, .intro-center');
+
+        // Unhide overlay
+        overlay.classList.remove('intro-overlay-hidden');
+
+        // Reset animations so they can replay
+        animatedElements.forEach((el) => {
+          el.classList.add('intro-reset');
+          // force reflow
+          void el.offsetWidth;
+          el.classList.remove('intro-reset');
+        });
+
+        const finish = () => {
+          overlay.classList.add('intro-overlay-hidden');
+          if (callback) callback();
+        };
+
+        if (center) {
+          center.addEventListener('animationend', finish, { once: true });
+          // Fallback - increased timeout to match longer animation
+          setTimeout(finish, 2800);
+        } else {
+          setTimeout(finish, 2800);
+        }
+      };
+
+      const showPage = () => {
+        const main = document.getElementById('page-root');
+        if (!main) return;
+        main.classList.remove('opacity-0');
+        main.classList.remove('page-fade-out');
+        main.classList.add('page-fade-in');
+      };
+
+      const hidePageWithFade = (onHidden) => {
+        const main = document.getElementById('page-root');
+        if (!main) {
+          if (onHidden) onHidden();
+          return;
+        }
+        main.classList.remove('page-fade-in');
+        main.classList.add('page-fade-out');
+
+        const done = () => {
+          main.removeEventListener('animationend', done);
+          if (onHidden) onHidden();
+        };
+
+        main.addEventListener('animationend', done, { once: true });
+        // Fallback
+        setTimeout(done, 500);
+      };
+
+      const enablePageTransitions = () => {
+        const links = document.querySelectorAll('a[data-page-link]');
+        links.forEach((link) => {
+          link.addEventListener('click', (event) => {
+            const href = link.getAttribute('href');
+            if (!href) return;
+
+            const url = new URL(href, window.location.origin);
+            if (url.origin !== window.location.origin || url.pathname === window.location.pathname) {
+              return;
+            }
+
+            event.preventDefault();
+            hidePageWithFade(() => {
+              window.location.href = href;
+            });
+          });
+        });
+      };
+
+      const init = () => {
+        // Always show bars first on load, then fade the page in
+        playIntroOverlay(() => {
+          showPage();
+          enablePageTransitions();
+        });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    </script>
+  </body>
+</html>
