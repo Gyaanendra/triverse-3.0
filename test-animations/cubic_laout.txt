@@ -1,0 +1,428 @@
+---
+import "../assets/app.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { Image } from "astro:assets";
+import ieeeLogo from "../images/ieeelogo.png";
+const { title = 'Triverse 3.0' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen bg-gradient-to-b from-[#00B5E2]/10 via-[#FFFFFF] to-[#009CA6]/10 text-base-content">
+    <div class="page-overlay"></div>
+
+    <!-- Intro animation overlay (bars + logo/title) -->
+    <div
+      id="intro-overlay"
+      class="intro-overlay fixed inset-0 flex items-center justify-center overflow-hidden z-50 pointer-events-none bg-black"
+    >
+      <div
+        class="intro-bar intro-bar-left absolute w-[140%] h-[45%] opacity-90 bg-gradient-to-r from-sky-500 to-indigo-500"
+      ></div>
+      <div
+        class="intro-bar intro-bar-right absolute w-[140%] h-[45%] opacity-90 bg-gradient-to-r from-sky-500 to-indigo-500"
+      ></div>
+      <div class="intro-center relative text-center text-white z-10">
+        <Image
+          src={ieeeLogo}
+          alt="IEEE Club Logo"
+          class="h-20 w-auto mb-4 mx-auto"
+          loading="lazy"
+        />
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-wide">Triverse 3.0</h1>
+        <p class="mt-2 text-sm md:text-base opacity-80">
+          IEEE Student Branch · Bennett University
+        </p>
+      </div>
+    </div>
+
+    <Header />
+
+    <!-- floating dock navigation only -->
+    <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+      <div class="btn-group bg-base-200/90 backdrop-blur rounded-box shadow-lg p-1">
+        <a href="/" class="btn btn-sm btn-ghost" data-page-link>Home</a>
+        <a href="/events" class="btn btn-sm btn-ghost" data-page-link>Events</a>
+        <a href="/teams" class="btn btn-sm btn-ghost" data-page-link>Teams</a>
+        <a href="/sponsers" class="btn btn-sm btn-ghost" data-page-link>Sponsers</a>
+      </div>
+    </nav>
+
+    <main id="page-root" class="pt-24 pb-24 px-4 max-w-5xl mx-auto opacity-0">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <script is:inline>
+      // Play the diagonal bars + logo intro animation.
+      // If a callback is provided, it runs after the animation finishes.
+      const playIntroOverlay = (callback) => {
+        const overlay = document.getElementById('intro-overlay');
+        if (!overlay) {
+          if (callback) callback();
+          return;
+        }
+
+        const center = overlay.querySelector('.intro-center');
+        const animatedElements = overlay.querySelectorAll('.intro-bar, .intro-center');
+
+        // Unhide overlay
+        overlay.classList.remove('intro-overlay-hidden');
+
+        // Reset animations so they can replay
+        animatedElements.forEach((el) => {
+          el.classList.add('intro-reset');
+          // force reflow
+          void el.offsetWidth;
+          el.classList.remove('intro-reset');
+        });
+
+        const finish = () => {
+          overlay.classList.add('intro-overlay-hidden');
+          if (callback) callback();
+        };
+
+        if (center) {
+          center.addEventListener('animationend', finish, { once: true });
+          // Fallback
+          setTimeout(finish, 2000);
+        } else {
+          setTimeout(finish, 2000);
+        }
+      };
+
+      const showPage = () => {
+        const main = document.getElementById('page-root');
+        if (!main) return;
+        main.classList.remove('opacity-0');
+        main.classList.remove('page-fade-out');
+        main.classList.add('page-fade-in');
+      };
+
+      const hidePageWithFade = (onHidden) => {
+        const main = document.getElementById('page-root');
+        if (!main) {
+          if (onHidden) onHidden();
+          return;
+        }
+        main.classList.remove('page-fade-in');
+        main.classList.add('page-fade-out');
+
+        const done = () => {
+          main.removeEventListener('animationend', done);
+          if (onHidden) onHidden();
+        };
+
+        main.addEventListener('animationend', done, { once: true });
+        // Fallback
+        setTimeout(done, 400);
+      };
+
+      const enablePageTransitions = () => {
+        const links = document.querySelectorAll('a[data-page-link]');
+        links.forEach((link) => {
+          link.addEventListener('click', (event) => {
+            const href = link.getAttribute('href');
+            if (!href) return;
+
+            const url = new URL(href, window.location.origin);
+            if (url.origin !== window.location.origin || url.pathname === window.location.pathname) {
+              return;
+            }
+
+            event.preventDefault();
+            hidePageWithFade(() => {
+              window.location.href = href;
+            });
+          });
+        });
+      };
+
+      const init = () => {
+        // Always show bars first on load, then fade the page in
+        playIntroOverlay(() => {
+          showPage();
+          enablePageTransitions();
+        });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    </script>
+  </body>
+</html>
+
+
+
+
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* Custom animations and page overlay */
+@layer utilities {
+  .page-fade-in {
+    animation: page-fade-in 800ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .page-fade-out {
+    animation: page-fade-out 400ms ease-in forwards;
+  }
+
+  .page-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+        circle at top,
+        rgba(129, 140, 248, 0.18),
+        transparent 55%
+      ),
+      radial-gradient(
+        circle at bottom,
+        rgba(56, 189, 248, 0.16),
+        transparent 55%
+      );
+    mix-blend-mode: screen;
+    opacity: 0;
+    animation: overlay-fade 1.2s ease-out forwards;
+    z-index: 0;
+  }
+}
+
+@keyframes overlay-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes page-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Enhanced intro overlay with diagonal bars */
+.intro-overlay {
+  background: linear-gradient(135deg, #000000 0%, #1a1a2e 100%);
+}
+
+.intro-overlay-hidden {
+  display: none;
+}
+
+/* Used to reset animations when replaying */
+.intro-reset {
+  animation: none !important;
+}
+
+.intro-bar-left {
+  animation: intro-bar-left 2400ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  box-shadow: 0 0 80px rgba(56, 189, 248, 0.6),
+    0 0 120px rgba(129, 140, 248, 0.4);
+  filter: blur(1px);
+}
+
+.intro-bar-right {
+  animation: intro-bar-right 2400ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  box-shadow: 0 0 80px rgba(56, 189, 248, 0.6),
+    0 0 120px rgba(129, 140, 248, 0.4);
+  filter: blur(1px);
+}
+
+.intro-center {
+  animation: intro-center 2600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5))
+    drop-shadow(0 0 40px rgba(56, 189, 248, 0.4));
+}
+
+/* Add particle effect */
+.intro-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+      circle at 20% 30%,
+      rgba(56, 189, 248, 0.3) 0%,
+      transparent 2%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(129, 140, 248, 0.3) 0%,
+      transparent 2%
+    ),
+    radial-gradient(
+      circle at 40% 80%,
+      rgba(56, 189, 248, 0.2) 0%,
+      transparent 2%
+    ),
+    radial-gradient(
+      circle at 60% 20%,
+      rgba(129, 140, 248, 0.2) 0%,
+      transparent 2%
+    ),
+    radial-gradient(
+      circle at 90% 40%,
+      rgba(56, 189, 248, 0.25) 0%,
+      transparent 2%
+    );
+  background-size: 200% 200%;
+  animation: particles 2600ms ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes particles {
+  0% {
+    opacity: 0;
+    background-position: 0% 0%;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    background-position: 100% 100%;
+  }
+}
+
+@keyframes intro-bar-left {
+  0% {
+    transform: translate(-110%, 40%) rotate(-35deg) scale(1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  55% {
+    transform: translate(-5%, 0%) rotate(-25deg) scale(1.08);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate(-110%, -40%) rotate(-35deg) scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes intro-bar-right {
+  0% {
+    transform: translate(110%, -40%) rotate(-35deg) scale(1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  55% {
+    transform: translate(5%, 0%) rotate(-25deg) scale(1.08);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate(110%, 40%) rotate(-35deg) scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes intro-center {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.92);
+    filter: blur(10px) drop-shadow(0 0 0px transparent);
+  }
+  30% {
+    opacity: 0;
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px) drop-shadow(0 0 30px rgba(56, 189, 248, 0.6));
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0) scale(1.04);
+    filter: blur(0px) drop-shadow(0 0 40px rgba(56, 189, 248, 0.7));
+  }
+  88% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.01);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.96);
+    filter: blur(8px) drop-shadow(0 0 20px rgba(56, 189, 248, 0.3));
+  }
+}
+
+/* Additional enhancement: pulse effect for logo */
+.intro-center img {
+  animation: logo-pulse 2600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes logo-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  55% {
+    transform: scale(1.06);
+  }
+  70% {
+    transform: scale(1.01);
+  }
+}
+
+/* Text reveal effect */
+.intro-center h1 {
+  animation: text-reveal 2600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.intro-center p {
+  animation: text-reveal 2600ms cubic-bezier(0.16, 1, 0.3, 1) 150ms forwards;
+}
+
+@keyframes text-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+    letter-spacing: 0.5em;
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.15em;
+  }
+  70% {
+    letter-spacing: 0.05em;
+  }
+}
