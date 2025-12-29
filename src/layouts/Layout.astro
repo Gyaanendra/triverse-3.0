@@ -122,12 +122,19 @@ const { title = 'Triverse 3.0' } = Astro.props;
 
       const hidePageWithFade = (onHidden) => {
         const main = document.getElementById('page-root');
+        const nav = document.getElementById('floating-nav');
+        
         if (!main) {
           if (onHidden) onHidden();
           return;
         }
+        
         main.classList.remove('page-fade-in');
         main.classList.add('page-fade-out');
+        
+        if (nav) {
+          nav.classList.add('page-fade-out');
+        }
 
         const done = () => {
           main.removeEventListener('animationend', done);
@@ -152,7 +159,12 @@ const { title = 'Triverse 3.0' } = Astro.props;
             }
 
             event.preventDefault();
+            
+            // Fade out the page content
             hidePageWithFade(() => {
+              // Play the intro animation and navigate immediately (in parallel)
+              playIntroOverlay(null);
+              // Navigate while animation is playing
               window.location.href = href;
             });
           });
@@ -160,7 +172,7 @@ const { title = 'Triverse 3.0' } = Astro.props;
       };
 
       const init = () => {
-        // Always show bars first on load, then fade the page in
+        // Play intro animation on page load (entrance)
         playIntroOverlay(() => {
           showPage();
           enablePageTransitions();
